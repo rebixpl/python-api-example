@@ -23,7 +23,7 @@ class AllReviews(Resource):
               in: query
               type: string
               required: false
-              enum: [asc, desc]
+              enum: [ASC, DESC]
               description: The sort order for the reviews (ascending or descending)
             - name: max_records
               in: query
