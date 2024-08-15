@@ -13,11 +13,14 @@ class BookReview:
         self.table = self.api.table("appxvEY4zTWDC23OQ", "tblKZYE5iH80o5hgV")
 
     def get_book_ratings(self, sort="ASC", max_records=10):
-        rating = ["Rating"]
-        if sort == "DESC":
+        if not sort:
+            return self.table.all(max_records=max_records)
+        elif sort == "ASC":
+            rating = ["Rating"]
+        elif sort == "DESC":
             rating = ["-Rating"]
-        table = self.table.all(sort=rating, max_records=max_records)
 
+        table = self.table.all(sort=rating, max_records=max_records)
         return table
 
     def add_book_rating(self, book_title, book_rating, notes=None):
