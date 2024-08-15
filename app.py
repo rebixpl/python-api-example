@@ -11,6 +11,66 @@ swagger = Swagger(app)
 br = book_review.BookReview()
 
 
+class Review(Resource):
+    def post(self):
+        """
+        This method responds to the POST request for adding a book review to the database.
+        ---
+        tags:
+        - Book Reviews
+        parameters:
+            - in: body
+              name: body
+              required: true
+              schema:
+                id: BookReview
+                required:
+                    - book
+                    - rating
+                properties:
+                    book:
+                        type: string
+                        description: The title of the book
+                    rating:
+                        type: integer
+                        description: The rating of the book (1-10)
+                    notes:
+                        type: string
+                        description: Additional notes about the book
+        responses:
+            201:
+                description: A successful POST request
+                content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                description: The success message
+            400:
+                description: Bad request if the fields are missing
+        """
+
+        data = request.get_json()
+
+        if not data:
+            return {"error": "Requestbody must be in JSON format."}, 400
+
+        book = data.get("book")
+        review = data.get("rating")
+        notes = data.get("notes", "")
+
+        # Check if the required fields are provided
+        if not book or not review:
+            return {"error": "Both 'book' and 'rating' are required fields."}, 400
+
+        # Add the new review to the database
+        br.add_book_rating(book, review, notes)
+
+        return {"message": "Review added successfully"}, 201
+
+
 class AllReviews(Resource):
     def get(self):
         """
@@ -160,6 +220,7 @@ class ProcessText(Resource):
         return {"processed_text": processed_text}, 200
 
 
+api.add_resource(Review, "/review")
 api.add_resource(AllReviews, "/all_reviews")
 api.add_resource(ProcessText, "/process_text")
 api.add_resource(UppercaseText, "/uppercase")
