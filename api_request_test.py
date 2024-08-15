@@ -15,7 +15,7 @@ import requests
 
 
 # Testing endpoint 2
-base_url = "http://localhost:5000/process_text"
+base_url = "https://book-review-api-example-kg19.onrender.com/process_text"
 
 params = {
     "text": "suck my avocado ",
